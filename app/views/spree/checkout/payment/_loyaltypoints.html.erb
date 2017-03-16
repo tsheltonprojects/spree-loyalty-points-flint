@@ -1,8 +1,18 @@
-<%- lp_balance = spree_current_user.loyalty_points_balance %>
-<%- equivalent_currency_balance = spree_current_user.loyalty_points_equivalent_currency %>
-Loyalty Points Balance: <%= lp_balance %><%= "($" + equivalent_currency_balance.to_s + ")" %>
-<%- lp_needed = @order.loyalty_points_for(@order.total, 'redeem') %>
-<br/>Loyalty Points Needed: <%= lp_needed %>
-<% if lp_needed > lp_balance %>
-  <br/><b>Insufficient Balance!</b>
+<% if !spree_current_user.nil? %>
+	<%# if user doesn't have any rewards points association, set balance to 0 %>
+	<% if spree_current_user.loyalty_points_balance.nil? %>
+		<% spree_current_user.loyalty_points_balance = 0 %>
+		<% spree_current_user.loyalty_points_equivalent_currency = 1 %>
+	<% end %>
+
+	<%- lp_balance = spree_current_user.loyalty_points_balance %>
+	<%- equivalent_currency_balance = spree_current_user.loyalty_points_equivalent_currency %>
+	Loyalty Points Balance: <%= lp_balance %><%= "($" + equivalent_currency_balance.to_s + ")" %>
+		<%- lp_needed = @order.loyalty_points_for(@order.total, 'redeem') %>
+		<br/>Loyalty Points Needed: <%= lp_needed %>
+	<% if lp_needed > lp_balance %>
+		<br/><b>Insufficient Balance!</b>
+	<% end %>
+<% else %>
+	No Reward Points Found!
 <% end %>
