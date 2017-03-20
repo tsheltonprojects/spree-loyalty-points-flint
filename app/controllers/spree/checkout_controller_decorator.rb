@@ -6,11 +6,14 @@ module Spree
 
       def sufficient_loyalty_points
         payment_method_ids = params[:order][:payments_attributes].collect do |payment|
+	  payment.each do |key, value|
+		  payment[key.to_i]
+	  end
           #payment["payment_method_id"]
           #payment[:payment_method_id]
-	  payment.each do |key, value|
-		  payment[key][:payment_method_id].to_i
-	  end
+	  #payment.each do |key, value|
+		  #payment[key][:payment_method_id].to_i
+	  #end
         end
         if Spree::PaymentMethod.loyalty_points_id_included?(payment_method_ids) && !@order.user.has_sufficient_loyalty_points?(@order)
           flash[:error] = Spree.t(:insufficient_loyalty_points)
