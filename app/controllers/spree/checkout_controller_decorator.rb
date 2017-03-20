@@ -7,7 +7,7 @@ module Spree
       def sufficient_loyalty_points
         payment_method_ids = params[:order][:payments_attributes].collect do |payment|
 	  payment.each do |key, value|
-		  payment[key.to_i]
+		  payment[key][:payment_method_id].to_i
 	  end
           #payment["payment_method_id"]
           #payment[:payment_method_id]
